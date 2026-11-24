@@ -33,6 +33,16 @@ Minimum macOS version: 10.13 (use [older version](https://github.com/stefansundi
 - Please note this app is not compatible with the “Allow your Apple Watch to unlock your Mac” feature.
 - Unfortunately this app can't be distributed via the App Store because it uses a private API to switch Bluetooth on/off.
 
+## Development
+
+GitHub Actions runs SwiftLint 0.65.1 in strict mode. To run the same check locally:
+
+```shell
+swiftlint lint --config .swiftlint.yml --strict
+```
+
+Existing violations are recorded in `.swiftlint-baseline.json`; new warnings or errors fail the check. Remove baseline entries as existing issues are fixed. Length violations can reappear when a file or type grows; review those changes before updating the affected baseline entries.
+
 ## Settings
 
 The application settings can be modified using the `defaults` command.
