@@ -1,2 +1,4 @@
 excluded:
   - Carthage
+
+baseline: .swiftlint-baseline.json
