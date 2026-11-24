@@ -1,7 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "enabledManagers": ["custom.regex"],
+  "extends": [
+    "config:best-practices",
+    "schedule:weekly",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)",
+    ":semanticCommitScope(deps)",
+    ":preserveSemverRanges"
+  ],
+  "forkProcessing": "enabled",
+  "timezone": "Europe/Stockholm",
   "customManagers": [
     {
       "customType": "regex",
