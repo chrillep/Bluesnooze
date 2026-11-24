@@ -38,6 +38,18 @@ Minimum macOS version: 10.13 (use [older version](https://github.com/stefansundi
 
 ## Development
 
+Install Xcode and select it as the active developer directory before building. Run `make` for a list of commands:
+
+```shell
+make build        # Build a Release app in .build/DerivedData/Build/Products/Release
+make install      # Build and copy to /Applications (quit Bluesnooze first)
+make run          # Build, install, and launch the installed app
+make lint         # Run strict SwiftLint (install the version pinned below)
+make clean        # Clean build products; leave the installed app untouched
+```
+
+For a per-user installation, use `make run INSTALL_DIR="$HOME/Applications"`. Override `CONFIGURATION=Debug` for a debug build or `DEPLOYMENT_TARGET` to select another SDK-supported minimum. The default local build uses macOS 12 for compatibility with recent Xcode SDKs and is ad-hoc signed, not notarized. Installation requires write access to the destination; the Makefile never runs `sudo`. Allow Bluetooth access when prompted.
+
 GitHub Actions runs the version in `.swiftlint-version` in strict mode on pull requests and pushes to `main`. To run the same check locally with that SwiftLint version:
 
 ```shell
