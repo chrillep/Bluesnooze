@@ -6,8 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-24
+
 ### Added
 - VoiceOver now names the menu bar icon, and describes what the Hide icon and paired device menu items do.
+- Local Makefile commands for building, installing, launching, linting, and cleaning.
+- SwiftLint and macOS build checks, dependency updates through Dependabot and Renovate, and downloadable CI artifacts.
+- actionlint and zizmor checks for GitHub Actions workflows.
+- A release workflow that builds a universal Intel and Apple Silicon app and attaches a zip and SHA-256 checksum to published releases.
+
+### Changed
+- Bluetooth sleep actions can be selected directly; choosing one disables the other.
+- Wi-Fi menu headings and indentation make sleep and wake options clearer.
+- This fork's downloadable release requires macOS 12 or later and is ad-hoc signed, not notarized.
+
+### Fixed
+- Launch termination caused by a missing Bluetooth permission description.
+- Local linting no longer scans downloaded dependencies in the build directory.
 
 ## [March 2023]
 
