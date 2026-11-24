@@ -46,9 +46,13 @@ swiftlint lint --config .swiftlint.yml --strict
 
 Existing violations are recorded in `.swiftlint-baseline.json`; new warnings or errors fail the check. Remove baseline entries as existing issues are fixed. Length violations can reappear when a file or type grows; review those changes before updating the affected baseline entries.
 
+GitHub Actions also builds the app on pull requests and pushes to `main`. The CI build overrides the deployment target to macOS 12 because recent Xcode SDKs cannot build for the project's 10.13 target; this does not change the project's minimum version.
+
 Dependabot checks GitHub Actions and Xcode-managed Swift packages weekly. Renovate checks supported dependencies, including GitHub Actions and the pinned SwiftLint version, on a weekly schedule; both bots may propose the same update. Renovate's Swift manager requires a `Package.swift` and does not currently support this Xcode project's package declarations. LaunchAtLogin follows a branch rather than a versioned release, so verify its resolved revision separately.
 
 To enable Renovate, install the [Renovate GitHub App](https://github.com/apps/renovate) and explicitly select this repository, including if it is a fork.
+
+Renovate is configured to automerge minor and patch updates after checks pass. Protect `main` and require both the build and SwiftLint checks so GitHub enforces them before any merge. The build check does not exercise app behavior.
 
 ## Settings
 

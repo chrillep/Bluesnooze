@@ -6,9 +6,11 @@
     ":semanticCommits",
     ":semanticCommitTypeAll(chore)",
     ":semanticCommitScope(deps)",
-    ":preserveSemverRanges"
+    ":preserveSemverRanges",
+    ":automergeMinor"
   ],
   "forkProcessing": "enabled",
+  "platformAutomerge": false,
   "timezone": "Europe/Stockholm",
   "customManagers": [
     {
