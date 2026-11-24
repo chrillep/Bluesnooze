@@ -68,13 +68,13 @@ Successful build runs provide an unsigned `Bluesnooze-unsigned.zip` artifact, wh
 
 Update the app's `MARKETING_VERSION` in both Xcode configurations and add a dated changelog entry in a PR. The release workflow validates universal Release packaging on PRs that change the app or release workflow. Merge after checks pass, tag that commit as `v<MARKETING_VERSION>`, and publish a GitHub release with the changelog entry as its notes.
 
-Publishing triggers the release workflow, which checks that the tag matches the app version, verifies both CPU architectures and the ad-hoc signature, then attaches `Bluesnooze.zip` and `Bluesnooze.zip.sha256`. Asset publishing uses a SHA-pinned `softprops/action-gh-release`; only that job has write permission. Assets appear after the workflow succeeds. Releases must remain mutable until assets are attached; this published-event workflow does not support immutable releases.
+Publishing triggers the release workflow, which checks that the tag matches the app version, verifies both CPU architectures and the ad-hoc signature, then attaches `Bluesnooze.zip` and `Bluesnooze.zip.sha256`. Asset publishing uses the runner's built-in GitHub CLI; only that job has write permission. Assets appear after the workflow succeeds. Releases must remain mutable until assets are attached; this published-event workflow does not support immutable releases.
 
 Verify a download with `shasum -a 256 -c Bluesnooze.zip.sha256` from the directory containing both files. The universal release targets macOS 12; the project's older deployment setting is unchanged.
 
 ### Dependency updates
 
-Dependabot checks GitHub Actions and Xcode-managed Swift packages weekly. Renovate checks supported dependencies, including GitHub Actions and the pinned SwiftLint version, on a weekly schedule; both bots may propose the same update. Renovate's Swift manager requires a `Package.swift` and does not currently support this Xcode project's package declarations. LaunchAtLogin follows a branch rather than a versioned release, so verify its resolved revision separately.
+Dependabot checks GitHub Actions and Xcode-managed Swift packages weekly, with a 14-day cooldown for version updates (not security updates). Renovate checks supported dependencies, including GitHub Actions and the pinned SwiftLint version, on a weekly schedule; both bots may propose the same update. Renovate's Swift manager requires a `Package.swift` and does not currently support this Xcode project's package declarations. LaunchAtLogin follows a branch rather than a versioned release, so verify its resolved revision separately.
 
 To enable Renovate, install the [Renovate GitHub App](https://github.com/apps/renovate) and explicitly select this repository, including if it is a fork.
 
