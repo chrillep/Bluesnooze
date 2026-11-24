@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - VoiceOver now names the menu bar icon, and describes what the Hide icon and paired device menu items do.
 - Local Makefile commands for building, installing, launching, linting, and cleaning.
 - SwiftLint and macOS build checks, dependency updates through Dependabot and Renovate, and downloadable CI artifacts.
+- actionlint and zizmor checks for GitHub Actions workflows.
 - A release workflow that builds a universal Intel and Apple Silicon app and attaches a zip and SHA-256 checksum to published releases.
 
 ### Changed

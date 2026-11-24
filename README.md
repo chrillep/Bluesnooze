@@ -58,6 +58,8 @@ swiftlint lint --config .swiftlint.yml --strict
 
 Existing violations are recorded in `.swiftlint-baseline.json`; new warnings or errors fail the check. Remove baseline entries as existing issues are fixed. Length violations can reappear when a file or type grows; review those changes before updating the affected baseline entries.
 
+Workflow checks run actionlint and zizmor on pull requests and pushes to `main`, avoiding duplicate feature-branch push runs. Zizmor uses annotations with Advanced Security disabled, so findings fail the check without requiring `security-events: write`.
+
 GitHub Actions also builds the app on pull requests and pushes to `main`. The CI build overrides the deployment target to macOS 12 because recent Xcode SDKs cannot build for the project's 10.13 target; this does not change the project's minimum version.
 
 Successful build runs provide an unsigned `Bluesnooze-unsigned.zip` artifact, which is not a signed or notarized release. The Xcode build log and result bundle are also uploaded when available, including after build failures.
