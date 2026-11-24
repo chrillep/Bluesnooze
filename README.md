@@ -38,13 +38,35 @@ Minimum macOS version: 10.13 (use [older version](https://github.com/stefansundi
 
 ## Development
 
-GitHub Actions runs SwiftLint 0.65.1 in strict mode on pull requests and pushes to `main`. To run the same check locally:
+Install Xcode and select it as the active developer directory before building. Run `make` for a list of commands:
+
+```shell
+make build        # Build a Release app in .build/DerivedData/Build/Products/Release
+make install      # Build and copy to /Applications (quit Bluesnooze first)
+make run          # Build, install, and launch the installed app
+make lint         # Run strict SwiftLint (install the version pinned below)
+make clean        # Clean build products; leave the installed app untouched
+```
+
+For a per-user installation, use `make run INSTALL_DIR="$HOME/Applications"`. Override `CONFIGURATION=Debug` for a debug build or `DEPLOYMENT_TARGET` to select another SDK-supported minimum. The default local build uses macOS 12 for compatibility with recent Xcode SDKs and is ad-hoc signed, not notarized. Installation requires write access to the destination; the Makefile never runs `sudo`. Allow Bluetooth access when prompted.
+
+GitHub Actions runs the version in `.swiftlint-version` in strict mode on pull requests and pushes to `main`. To run the same check locally with that SwiftLint version:
 
 ```shell
 swiftlint lint --config .swiftlint.yml --strict
 ```
 
 Existing violations are recorded in `.swiftlint-baseline.json`; new warnings or errors fail the check. Remove baseline entries as existing issues are fixed. Length violations can reappear when a file or type grows; review those changes before updating the affected baseline entries.
+
+GitHub Actions also builds the app on pull requests and pushes to `main`. The CI build overrides the deployment target to macOS 12 because recent Xcode SDKs cannot build for the project's 10.13 target; this does not change the project's minimum version.
+
+Successful build runs provide an unsigned `Bluesnooze-unsigned.zip` artifact, which is not a signed or notarized release. The Xcode build log and result bundle are also uploaded when available, including after build failures.
+
+Dependabot checks GitHub Actions and Xcode-managed Swift packages weekly. Renovate checks supported dependencies, including GitHub Actions and the pinned SwiftLint version, on a weekly schedule; both bots may propose the same update. Renovate's Swift manager requires a `Package.swift` and does not currently support this Xcode project's package declarations. LaunchAtLogin follows a branch rather than a versioned release, so verify its resolved revision separately.
+
+To enable Renovate, install the [Renovate GitHub App](https://github.com/apps/renovate) and explicitly select this repository, including if it is a fork.
+
+Renovate is configured to automerge minor and patch updates after checks pass, with a 14-day minimum release age where supported. Protect `main` and require both the build and SwiftLint checks so GitHub enforces them before any merge. The build check does not exercise app behavior.
 
 ## Settings
 

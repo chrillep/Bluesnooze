@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    labels: [dependencies, github_actions]
+    schedule:
+      interval: weekly
+  - package-ecosystem: swift
+    directory: /src
+    labels: [dependencies, swift]
+    schedule:
+      interval: weekly

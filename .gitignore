@@ -2,3 +2,4 @@ xcuserdata/
 Carthage
 DerivedData
 .DS_Store
+/.build/
