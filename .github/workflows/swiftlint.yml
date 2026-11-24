@@ -20,4 +20,4 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: Apple-Actions/swiftlint@54c2fa06713097aca7a35224a50eb982ee5c6116 # v1
         with:
-          version: 0.65.1
+          version-file: .swiftlint-version

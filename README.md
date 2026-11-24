@@ -38,13 +38,15 @@ Minimum macOS version: 10.13 (use [older version](https://github.com/stefansundi
 
 ## Development
 
-GitHub Actions runs SwiftLint 0.65.1 in strict mode on pull requests and pushes to `main`. To run the same check locally:
+GitHub Actions runs the version in `.swiftlint-version` in strict mode on pull requests and pushes to `main`. To run the same check locally with that SwiftLint version:
 
 ```shell
 swiftlint lint --config .swiftlint.yml --strict
 ```
 
 Existing violations are recorded in `.swiftlint-baseline.json`; new warnings or errors fail the check. Remove baseline entries as existing issues are fixed. Length violations can reappear when a file or type grows; review those changes before updating the affected baseline entries.
+
+Dependabot checks GitHub Actions and Xcode-managed Swift packages weekly. The LaunchAtLogin dependency follows a branch rather than a versioned release; verify its resolved revision separately. Renovate checks the pinned SwiftLint version; install the [Renovate GitHub App](https://github.com/apps/renovate) and select this repository to enable it. Selecting the repository explicitly also enables Renovate for forks.
 
 ## Settings
 
