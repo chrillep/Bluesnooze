@@ -11,7 +11,23 @@
   ],
   "forkProcessing": "enabled",
   "platformAutomerge": false,
+  "minimumReleaseAge": "14 days",
+  "labels": ["dependencies"],
   "timezone": "Europe/Stockholm",
+  "packageRules": [
+    {
+      "matchManagers": ["cocoapods", "swift"],
+      "addLabels": ["swift"]
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "addLabels": ["github_actions"]
+    },
+    {
+      "matchPackageNames": ["realm/SwiftLint"],
+      "addLabels": ["swift"]
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
