@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/release.yml
+      - src/**
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    name: Universal release package
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build universal macOS app
+        uses: Apple-Actions/xcodebuild@082b0cef7dd252ee247a2b40358ba5cbe992fad7 # v1.3.0
+        with:
+          project: src/Bluesnooze.xcodeproj
+          scheme: Bluesnooze
+          configuration: Release
+          sdk: macosx
+          destination: generic/platform=macOS
+          build-settings: |
+            MACOSX_DEPLOYMENT_TARGET=12.0
+            ARCHS=arm64 x86_64
+            ONLY_ACTIVE_ARCH=NO
+            CODE_SIGN_IDENTITY=-
+            DEVELOPMENT_TEAM=
+      - name: Validate and package app
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          app=.build/DerivedData/Build/Products/Release/Bluesnooze.app
+          version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")
+          if [ "$GITHUB_EVENT_NAME" = release ] && [ "$RELEASE_TAG" != "v$version" ]; then
+            echo "::error::Release tag must match the app version v$version."
+            exit 1
+          fi
+          test "$(/usr/libexec/PlistBuddy -c 'Print :LSMinimumSystemVersion' "$app/Contents/Info.plist")" = 12.0
+          for arch in arm64 x86_64; do
+            lipo "$app/Contents/MacOS/Bluesnooze" -verify_arch "$arch"
+          done
+          codesign --verify --deep --strict "$app"
+          ditto -c -k --sequesterRsrc --keepParent "$app" Bluesnooze.zip
+          shasum -a 256 Bluesnooze.zip > Bluesnooze.zip.sha256
+      - name: Upload release package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-package
+          path: |
+            Bluesnooze.zip
+            Bluesnooze.zip.sha256
+          if-no-files-found: error
+
+  publish:
+    if: github.event_name == 'release'
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-package
+      - name: Attach release assets
+        uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          fail_on_unmatched_files: true
+          files: |
+            Bluesnooze.zip
+            Bluesnooze.zip.sha256
