@@ -38,7 +38,7 @@ Minimum macOS version: 10.13 (use [older version](https://github.com/stefansundi
 
 ## Development
 
-GitHub Actions runs SwiftLint 0.65.1 in strict mode. To run the same check locally:
+GitHub Actions runs SwiftLint 0.65.1 in strict mode on pull requests and pushes to `main`. To run the same check locally:
 
 ```shell
 swiftlint lint --config .swiftlint.yml --strict

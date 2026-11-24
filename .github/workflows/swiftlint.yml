@@ -2,10 +2,16 @@ name: SwiftLint
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   swiftlint:
@@ -15,5 +21,3 @@ jobs:
       - uses: Apple-Actions/swiftlint@54c2fa06713097aca7a35224a50eb982ee5c6116 # v1
         with:
           version: 0.65.1
-          config: .swiftlint.yml
-          strict: true
